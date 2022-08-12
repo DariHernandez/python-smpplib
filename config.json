@@ -1,0 +1,7 @@
+{
+    "smpp_server": "smpp://3.130.124.155",
+    "smpp_port": 52225,
+    "system_id": "gomobitltd_plat", 
+    "password": "K8L3HObY",
+    "source_addr": "+527295162472"
+}

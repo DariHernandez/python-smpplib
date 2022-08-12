@@ -31,7 +31,7 @@ with open (numbers_path) as file:
     numbers = list(map (lambda num : num.strip(), numbers))
 
 # if you want to know what's happening
-logging.basicConfig(level='DEBUG')
+logging.basicConfig(level='INFO')
 
 # Two parts, UCS2, SMS with UDH
 parts, encoding_flag, msg_type_flag = smpplib.gsm.make_parts(message)
@@ -48,9 +48,16 @@ client.connect()
 client.bind_transceiver(system_id=system_id, password=password)
 
 # Send the message to each number
+total_messages = 0
 for number in numbers:
 
+    print ()
+    logging.info (f"\tCurrent number: {number} ({numbers.index(number)+1}/{len(numbers)})")
+
     for part in parts:
+
+        logging.info (f"\t\tSendning message {parts.index(part)+1} / {len(parts)}")
+
         pdu = client.send_message(
             source_addr_ton=smpplib.consts.SMPP_TON_INTL,
             #source_addr_npi=smpplib.consts.SMPP_NPI_ISDN,
@@ -68,6 +75,10 @@ for number in numbers:
             registered_delivery=True,
         )
         print(pdu.sequence)
+
+        total_messages += 1
+
+    logging.info (f"\t\tTotal messaged send: {total_messages}")
     
 # Enters a loop, waiting for incoming PDUs
 client.listen()
